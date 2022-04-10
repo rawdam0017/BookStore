@@ -5,7 +5,7 @@ const jwtSecret = "0345857bcb963a328815694b259516725814c2b40825919977e748bdc0400
 
 
 exports.register = async (req, res, next) => {
-    const { username, password } = req.body
+    const { username, password, name, email, Gender, Birthday } = req.body
     if (password.length < 6) {
         return res.status(400).json({ message: "Password less than 6 characters" })
     }
@@ -13,6 +13,10 @@ exports.register = async (req, res, next) => {
         await User.create({
             username,
             password: hash,
+            name,
+            email,
+            Gender,
+            Birthday
         })
             .then((user) => {
                 const maxAge = 3 * 60 * 60;
@@ -146,41 +150,41 @@ exports.deleteUser = async (req, res, next) => {
 exports.adminAuth = (req, res, next) => {
     const token = req.cookies.jwt
     if (token) {
-      jwt.verify(token, jwtSecret, (err, decodedToken) => {
-        if (err) {
-          return res.status(401).json({ message: "Not authorized" })
-        } else {
-          if (decodedToken.role !== "admin") {
-            return res.status(401).json({ message: "Not authorized" })
-          } else {
-            next()
-          }
-        }
-      })
+        jwt.verify(token, jwtSecret, (err, decodedToken) => {
+            if (err) {
+                return res.status(401).json({ message: "Not authorized" })
+            } else {
+                if (decodedToken.role !== "admin") {
+                    return res.status(401).json({ message: "Not authorized" })
+                } else {
+                    next()
+                }
+            }
+        })
     } else {
-      return res
-        .status(401)
-        .json({ message: "Not authorized, token not available" })
+        return res
+            .status(401)
+            .json({ message: "Not authorized, token not available" })
     }
-  }
+}
 
-  exports.userAuth = (req, res, next) => {
+exports.userAuth = (req, res, next) => {
     const token = req.cookies.jwt
     if (token) {
-      jwt.verify(token, jwtSecret, (err, decodedToken) => {
-        if (err) {
-          return res.status(401).json({ message: "Not authorized" })
-        } else {
-          if (decodedToken.role !== "Basic") {
-            return res.status(401).json({ message: "Not authorized" })
-          } else {
-            next()
-          }
-        }
-      })
+        jwt.verify(token, jwtSecret, (err, decodedToken) => {
+            if (err) {
+                return res.status(401).json({ message: "Not authorized" })
+            } else {
+                if (decodedToken.role !== "Basic") {
+                    return res.status(401).json({ message: "Not authorized" })
+                } else {
+                    next()
+                }
+            }
+        })
     } else {
-      return res
-        .status(401)
-        .json({ message: "Not authorized, token not available" })
+        return res
+            .status(401)
+            .json({ message: "Not authorized, token not available" })
     }
-  }
+}
