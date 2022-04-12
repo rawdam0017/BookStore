@@ -41,7 +41,7 @@ const UserSchema = new Mongoose.Schema({
       {
         productId: {
           type: Schema.Types.ObjectId,
-          ref: "Product",
+          ref: "Book",
           required: true,
         },
         quantity: {
