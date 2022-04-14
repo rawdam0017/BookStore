@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 require('mongoose-type-url');
 
 
+
+
 const Schema = mongoose.Schema;
 
 const bookschema = new Schema({
@@ -28,7 +30,9 @@ const bookschema = new Schema({
     image: {
         // type: String,
         type:mongoose.SchemaTypes.Url,
-    }
+    },
+
+    // category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
 
 });
 

@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const router = require("./routes/book-routes");
 const { route } = require("./routes/book-routes");
 const authRouter = require("./routes/auth-routes");
+const catRouter = require("./routes/category-routers");
 const { adminAuth, userAuth } = require("./controllers/auth-controller");
 
 const cookieParser = require("cookie-parser");
@@ -19,6 +20,7 @@ app.use(cors())
 
 app.use('/books', router)
 app.use("/auth", authRouter)
+app.use("/category", catRouter)
 app.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
 app.get("/basic", userAuth, (req, res) => res.send("User Route"));
 app.use(cookieParser());
