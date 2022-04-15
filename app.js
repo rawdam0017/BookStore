@@ -4,12 +4,25 @@ const mongoose = require("mongoose");
 const router = require("./routes/book-routes");
 const { route } = require("./routes/book-routes");
 const authRouter = require("./routes/auth-routes");
-const catRouter = require("./routes/category-routers");
+const CART_CONTROLLER = require('./controllers/cart-controller');
+const AUTH = require("./controllers/auth-controller")
+const categoryRouter = require("./routes/category-routers");
+// const cartRouter = require("./routes/cart-routes");
 const { adminAuth, userAuth } = require("./controllers/auth-controller");
 
 const cookieParser = require("cookie-parser");
 const cors = require('cors')
 const app = express();
+
+
+
+
+app.get('/cart/getSize', AUTH.userAuth, CART_CONTROLLER.getCartSize);
+app.get('/auth/cart', AUTH.userAuth, CART_CONTROLLER.getCart);
+app.post('/auth/cart/add/:bookId', AUTH.userAuth, CART_CONTROLLER.addToCart);
+app.delete('/auth/cart/delete/:bookId', AUTH.userAuth, CART_CONTROLLER.removeFromCart);
+app.post('/auth/cart/checkout', AUTH.userAuth, CART_CONTROLLER.checkout);
+
 
 
 
@@ -20,7 +33,8 @@ app.use(cors())
 
 app.use('/books', router)
 app.use("/auth", authRouter)
-app.use("/category", catRouter)
+app.use("/category", categoryRouter)
+// app.use("/cart", cartRouter)
 app.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
 app.get("/basic", userAuth, (req, res) => res.send("User Route"));
 app.use(cookieParser());

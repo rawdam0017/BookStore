@@ -1,37 +1,14 @@
-// const Mongoose = require("mongoose")
-// const User = require("./User");
-// UserSchema.methods.addToCart = function (product) {
-//     const cartProductIndex = this.cart.items.findIndex((cp) => {
-//       return cp.productId.toString() === product._id.toString();
-//     });
-//     let newQuantity = 1;
-//     const updatedCartItems = [...this.cart.items];
-  
-//     if (cartProductIndex >= 0) {
-//       newQuantity = this.cart.items[cartProductIndex].quantity + 1;
-//       updatedCartItems[cartProductIndex].quantity = newQuantity;
-//     } else {
-//       updatedCartItems.push({
-//         productId: product._id,
-//         quantity: newQuantity,
-//       });
-//     }
-//     const updatedCart = {
-//       items: updatedCartItems,
-//     };
-//     this.cart = updatedCart;
-//     return this.save();
-//   };
-  
-//   UserSchema.methods.removeFromCart = function (productId) {
-//     const UpdatedCartItems = this.cart.items.filter((item) => {
-//       return item.productId.toString() !== productId.toString();
-//     });
-//     this.cart.items = UpdatedCartItems;
-//     return this.save();
-//   };
-  
-//   UserSchema.methods.clearCart = function () {
-//     this.cart = { items: [] };
-//     return this.save();
-//   };
+const MONGOOSE = require('mongoose');
+
+const NUMBER = MONGOOSE.Schema.Types.Number;
+const OBJECT_ID = MONGOOSE.Schema.Types.ObjectId;
+
+const CART_SCHEMA = MONGOOSE.Schema({
+    user: { type: OBJECT_ID, ref: 'user' },
+    books: [{ type: OBJECT_ID, ref: 'Book' }],
+    totalPrice: { type: NUMBER, default: 0 }
+});
+
+const CART = MONGOOSE.model('Cart', CART_SCHEMA);
+
+module.exports = CART;
