@@ -37,7 +37,10 @@ app.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
 app.get("/basic", userAuth, (req, res) => res.send("User Route"));
 app.use(cookieParser());
 
+app.get('*',(req,res)=>{
+  res.send("Front end")
 
+})
 
 
 mongoose
