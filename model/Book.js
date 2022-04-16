@@ -28,11 +28,9 @@ const bookschema = new Schema({
 
     },
     image: {
-        // type: String,
         type:mongoose.SchemaTypes.Url,
     },
 
-    // category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
 
 });
 

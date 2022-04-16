@@ -7,7 +7,6 @@ const authRouter = require("./routes/auth-routes");
 const CART_CONTROLLER = require('./controllers/cart-controller');
 const AUTH = require("./controllers/auth-controller")
 const categoryRouter = require("./routes/category-routers");
-// const cartRouter = require("./routes/cart-routes");
 const { adminAuth, userAuth } = require("./controllers/auth-controller");
 
 const cookieParser = require("cookie-parser");
@@ -34,7 +33,6 @@ app.use(cors())
 app.use('/books', router)
 app.use("/auth", authRouter)
 app.use("/category", categoryRouter)
-// app.use("/cart", cartRouter)
 app.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
 app.get("/basic", userAuth, (req, res) => res.send("User Route"));
 app.use(cookieParser());
@@ -44,7 +42,6 @@ app.use(cookieParser());
 
 mongoose
   .connect(
-    //   "mongodb+srv://raneem:raneembook@cluster0.7nuz1.mongodb.net/test-book?retryWrites=true&w=majority"
     "mongodb+srv://admin:admin@cluster0.2fktb.mongodb.net/Bookstore?retryWrites=true&w=majority"
   )
   .then(() => console.log("Conected To Database"))
@@ -54,4 +51,3 @@ app.listen('5000', () => { console.log('listen 5000') })
 
 module.exports = app;
 
-//   then(() => {app.listen(5000)})

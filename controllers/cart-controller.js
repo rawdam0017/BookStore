@@ -114,7 +114,7 @@ module.exports = {
                         id: book._id,
                         title: book.title,
                         author: book.author,
-                        cover: book.cover,
+                        image: book.image,
                         price: book.price,
                         qty: req.body[book._id.toString()]
                     });

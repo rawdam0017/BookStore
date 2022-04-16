@@ -7,7 +7,7 @@ const jwtSecret = "0345857bcb963a328815694b259516725814c2b40825919977e748bdc0400
 exports.register = async (req, res, next) => {
     const { username, password, name, email, Gender, Birthday } = req.body
     if (password.length < 6) {
-        return res.status(400).json({ message: "Password less than 6 characters" })
+        return res.status(404).json({ message: "Password less than 6 characters" })
     }
     bcrypt.hash(password, 10).then(async (hash) => {
         await User.create({
@@ -49,14 +49,15 @@ exports.register = async (req, res, next) => {
 
 
 exports.login = async (req, res, next) => {
-    const { username, password } = req.body
-    if (!username || !password) {
+    const { email, password } = req.body
+    console.log(email,password)
+    if (!email || !password) {
         return res.status(400).json({
             message: "Username or Password not present",
         })
     }
     try {
-        const user = await User.findOne({ username })
+        const user = await User.findOne({ email })
         if (!user) {
             res.status(401).json({
                 message: "Login not successful",
@@ -68,7 +69,7 @@ exports.login = async (req, res, next) => {
                 if (result) {
                     const maxAge = 3 * 60 * 60;
                     const token = jwt.sign(
-                        { id: user._id, username, role: user.role },
+                        { id: user._id, email, role: user.role },
                         jwtSecret,
                         {
                             expiresIn: maxAge, // 3hrs in sec
@@ -81,6 +82,8 @@ exports.login = async (req, res, next) => {
                     res.status(201).json({
                         message: "User successfully Logged in",
                         user: user._id,
+                        username:user.username
+                        
                     });
                 } else {
                     res.status(400).json({ message: "Login not succesful" });
