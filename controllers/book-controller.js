@@ -60,7 +60,7 @@ const addBook = async (req, res, next) => {
                     res.json(err);
                 }
                 else {
-                    res.json(data);
+                    // res.json(data);
                 }
             });
             const { name, author, description, price, available, image } = req.body
@@ -86,7 +86,7 @@ const addBook = async (req, res, next) => {
                 return res.status(500).json({ message: 'Unable to add' })
             }
 
-            return res.status(201).json({ book })
+            return res.status(200).json({ book })
 
         }
     });

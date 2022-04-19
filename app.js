@@ -14,7 +14,11 @@ const cors = require('cors')
 const app = express();
 
 
+//middlewares
 
+
+app.use(express.json())
+app.use(cors())
 
 app.get('/cart/getSize', AUTH.userAuth, CART_CONTROLLER.getCartSize);
 app.get('/auth/cart', AUTH.userAuth, CART_CONTROLLER.getCart);
@@ -25,10 +29,6 @@ app.post('/auth/cart/checkout', AUTH.userAuth, CART_CONTROLLER.checkout);
 
 
 
-//middlewares
-
-app.use(express.json())
-app.use(cors())
 
 app.use('/books', router)
 app.use("/auth", authRouter)
@@ -37,10 +37,7 @@ app.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
 app.get("/basic", userAuth, (req, res) => res.send("User Route"));
 app.use(cookieParser());
 
-app.get('*',(req,res)=>{
-  res.send("Front end")
 
-})
 
 
 mongoose

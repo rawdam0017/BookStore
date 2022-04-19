@@ -27,13 +27,14 @@ exports.register = async (req, res, next) => {
                         expiresIn: maxAge, // 3hrs in sec
                     }
                 );
-                res.cookie("jwt", token, {
-                    httpOnly: true,
-                    maxAge: maxAge * 1000, // 3hrs in ms
-                });
+                // res.cookie("jwt", token, {
+                //     httpOnly: true,
+                //     maxAge: maxAge * 1000, // 3hrs in ms
+                // });
                 res.status(201).json({
                     message: "User successfully created",
-                    user: user._id,
+                    // user: user._id,
+                    token
                 });
             })
             .catch((error) =>
@@ -50,7 +51,7 @@ exports.register = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
     const { email, password } = req.body
-    console.log(email,password)
+    console.log(email, password)
     if (!email || !password) {
         return res.status(400).json({
             message: "Username or Password not present",
@@ -75,15 +76,16 @@ exports.login = async (req, res, next) => {
                             expiresIn: maxAge, // 3hrs in sec
                         }
                     );
-                    res.cookie("jwt", token, {
-                        httpOnly: true,
-                        maxAge: maxAge * 1000, // 3hrs in ms
-                    });
+                    // res.cookie("jwt", token, {
+                    //     httpOnly: true,
+                    //     maxAge: maxAge * 1000, // 3hrs in ms
+                    // });
                     res.status(201).json({
                         message: "User successfully Logged in",
-                        user: user._id,
-                        username:user.username
-                        
+                        token
+                        // user: user._id,
+                        // username: user.username
+
                     });
                 } else {
                     res.status(400).json({ message: "Login not succesful" });
