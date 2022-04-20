@@ -3,6 +3,7 @@ require('mongoose-type-url');
 
 
 
+const OBJECT_ID = mongoose.Schema.Types.ObjectId;
 
 const Schema = mongoose.Schema;
 
@@ -28,8 +29,13 @@ const bookschema = new Schema({
 
     },
     image: {
-        type:mongoose.SchemaTypes.Url,
+        type: mongoose.SchemaTypes.Url,
     },
+    category: {
+        type: OBJECT_ID,
+        ref: 'Category'
+    },
+
 
 
 });

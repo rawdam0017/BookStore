@@ -120,6 +120,7 @@ const UpdateBook = async (req, res, next) => {
 }
 
 const deleteBook = async (req, res, next) => {
+    
     const id = req.params.id
 
     let book;

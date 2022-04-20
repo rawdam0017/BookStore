@@ -101,6 +101,22 @@ exports.login = async (req, res, next) => {
 }
 
 
+exports.getAllusers = async (req, res, next) => {
+    let users;
+
+    try {
+        users = await User.find();
+    } catch (err) {
+        console.log(err);
+    }
+
+    if (!users) {
+        return res.status(404).json({ message: "No product found" })
+    }
+    return res.status(200).json({ users })
+}
+
+
 exports.update = async (req, res, next) => {
     const { role, id } = req.body;
     // First - Verifying if role and id is presnt
