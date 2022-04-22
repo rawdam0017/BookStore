@@ -169,7 +169,9 @@ exports.deleteUser = async (req, res, next) => {
 }
 
 exports.adminAuth = (req, res, next) => {
-    const token = req.cookies.jwt
+    // const token = req.cookies.jwt
+    const token = req.headers.authorization.split(' ')[1];
+
     if (token) {
         jwt.verify(token, jwtSecret, (err, decodedToken) => {
             if (err) {
@@ -190,7 +192,8 @@ exports.adminAuth = (req, res, next) => {
 }
 
 exports.userAuth = (req, res, next) => {
-    const token = req.cookies.jwt
+    // const token = req.cookies.jwt
+    const token = req.headers.authorization.split(' ')[1];
     if (token) {
         jwt.verify(token, jwtSecret, (err, decodedToken) => {
             if (err) {
@@ -208,4 +211,17 @@ exports.userAuth = (req, res, next) => {
             .status(401)
             .json({ message: "Not authorized, token not available" })
     }
+}
+
+exports.getPurchaseHistory= (req, res) => {
+    let userId = req.user.id;
+    RECEIPT
+        .find({ user: userId })
+        .sort({ creationDate: -1 })
+        .then((receipts) => {
+            res.status(200).json({
+                message: '',
+                data: receipts
+            });
+        });
 }

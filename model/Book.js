@@ -10,7 +10,8 @@ const Schema = mongoose.Schema;
 const bookschema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     author: {
         type: String,
@@ -31,7 +32,7 @@ const bookschema = new Schema({
     image: {
         type: mongoose.SchemaTypes.Url,
     },
-    category: {
+    categoryId: {
         type: OBJECT_ID,
         ref: 'Category'
     },

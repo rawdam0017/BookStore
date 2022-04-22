@@ -47,7 +47,7 @@ router.delete('/:id', function(req, res, next) {
 
 // const booksId = Book.findById(req.params.id)
 
-router.delete('/:id/books/:booksId', async (req, res) => {
+router.delete('/:id/books/:categoryId', async (req, res) => {
   try {
     const category = await Category.findById(req.params.id);
     if(!category) return res.status(404).send("Cateory is not found");

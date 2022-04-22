@@ -15,9 +15,9 @@ router.post('/',bookController.addBook)
 router.get('/:id',bookController.getById)
 
 //this rout will Update book 
-router.put('/:id',bookController.UpdateBook)
+router.put('/:name/category/:categoryId',bookController.UpdateBook)
 
 //this rout will delete book 
-router.delete('/:id',bookController.deleteBook)
+router.delete('/:name/category/:categoryId',bookController.deleteBook)
 
 module.exports=router;
