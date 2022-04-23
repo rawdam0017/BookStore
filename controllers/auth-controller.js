@@ -116,11 +116,28 @@ exports.getAllusers = async (req, res, next) => {
     return res.status(200).json({ users })
 }
 
+exports.getAllusers = async (req, res, next) => {
+    let users;
+
+    try {
+        users = await User.find();
+    } catch (err) {
+        console.log(err);
+    }
+
+    if (!users) {
+        return res.status(404).json({ message: "No product found" })
+    }
+    return res.status(200).json({ users })
+}
+
 
 exports.update = async (req, res, next) => {
-    const { role, id } = req.body;
+    const id = req.params.id;
+
+    const { role } = req.body;
     // First - Verifying if role and id is presnt
-    if (role && id) {
+    if (role) {
         // Second - Verifying if the value of role is admin
         if (role === "admin") {
             // Finds the user with the id
@@ -150,12 +167,41 @@ exports.update = async (req, res, next) => {
                         .json({ message: "An error occurred", error: error.message });
                 })
         }
+        else if (role === "Basic") {
+            // Finds the user with the id
+
+            await User.findById(id)
+                .then((user) => {
+                    // Third - Verifies the user is not an admin
+                    if (user.role !== "Basic") {
+                        user.role = role;
+                        user.save((err) => {
+                            //Monogodb error checker
+                            if (err) {
+                                res
+                                    .status("400")
+                                    .json({ message: "An error occurred", error: err.message });
+                                process.exit(1);
+                            }
+                            res.status("201").json({ message: "Update successful", user });
+                        });
+                    } else {
+                        res.status(400).json({ message: "User is already an Basic" });
+                    }
+                })
+                .catch((error) => {
+                    res
+                        .status(400)
+                        .json({ message: "An error occurred", error: error.message });
+                })
+
+        }
     }
 };
 
 
 exports.deleteUser = async (req, res, next) => {
-    const { id } = req.body
+    const { id } = req.params
     await User.findById(id)
         .then(user => user.remove())
         .then(user =>
@@ -170,7 +216,7 @@ exports.deleteUser = async (req, res, next) => {
 
 exports.adminAuth = (req, res, next) => {
     // const token = req.cookies.jwt
-    const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization.split(" ")[1];
 
     if (token) {
         jwt.verify(token, jwtSecret, (err, decodedToken) => {
@@ -213,7 +259,7 @@ exports.userAuth = (req, res, next) => {
     }
 }
 
-exports.getPurchaseHistory= (req, res) => {
+exports.getPurchaseHistory = (req, res) => {
     let userId = req.user.id;
     RECEIPT
         .find({ user: userId })

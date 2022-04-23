@@ -4,8 +4,8 @@ const { register, login,getAllusers, update, deleteUser, adminAuth, userAuth, ge
 router.route("/").get(adminAuth,getAllusers);
 router.route("/register").post(register);
 router.route("/login").post(login);
-router.route("/update").put(adminAuth, update);
-router.route("/deleteUser").delete(adminAuth, deleteUser);
+router.route("/update/:id").put(adminAuth, update);
+router.route("/deleteUser/:id").delete(adminAuth, deleteUser);
 router.route("/purchaseHistory").get(userAuth,getPurchaseHistory)
 
 

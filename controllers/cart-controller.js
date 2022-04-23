@@ -29,6 +29,7 @@ module.exports = {
 
     addToCart: (req, res) => {
         let userId = req.user.id;
+        console.log(req.body)
         let bookId = req.params.bookId;
 
         BOOK.findById(bookId).then((book) => {
@@ -100,12 +101,14 @@ module.exports = {
     },
 
     checkout: (req, res) => {
-        let userId = req.user.id;
-        let totalPrice = 0;
-        let products = [];
+        console.log(req.body)
 
+        // let userId = req.userId;
+        // let totalPrice = req;
+        // let products = [];
         CART
-            .findOne({ user: userId })
+        
+            // .findOne({ user: userId })
             .populate('books')
             .then((cart) => {
                 for (let book of cart.books) {

@@ -4,6 +4,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Category = require('../model/category');
 var Book = require('../model/Book');
+const { adminAuth } = require('../controllers/auth-controller');
 
 /* GET /categories listing. */
 router.get('/', function(req, res, next) {
@@ -14,7 +15,7 @@ router.get('/', function(req, res, next) {
 });
 
 /* POST /categories */
-router.post('/', function(req, res, next) {
+router.post('/',adminAuth, function(req, res, next) {
   Category.create(req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
@@ -30,7 +31,7 @@ router.get('/:id', function(req, res, next) {
 });
 
 /* PUT /categories/:id */
-router.put('/:id', function(req, res, next) {
+router.put('/:id',adminAuth, function(req, res, next) {
   Category.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
@@ -38,27 +39,26 @@ router.put('/:id', function(req, res, next) {
 });
 
 /* DELETE /categories/:id */
-router.delete('/:id', function(req, res, next) {
+router.delete('/:id',adminAuth,function(req, res, next) {
   Category.findByIdAndRemove(req.params.id, req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
   });
 });
 
-// const booksId = Book.findById(req.params.id)
 
-router.delete('/:id/books/:categoryId', async (req, res) => {
-  try {
-    const category = await Category.findById(req.params.id);
-    if(!category) return res.status(404).send("Cateory is not found");
-    category.books.remove( req.params.booksId );
-    category.save();
-    const book = await Book.findByIdAndRemove(req.params.booksId);
-    if(!book) return res.status(404).send("Subcategory is not found");
-    res.status(202).send("Subcategory is deleted successfully");
-  } catch (error) {
-    res.send(error.message);
-  }
-})
+// router.delete('/:id/books/:categoryId', async (req, res) => {
+//   try {
+//     const category = await Category.findById(req.params.id);
+//     if(!category) return res.status(404).send("Cateory is not found");
+//     category.books.remove( req.params.booksId );
+//     category.save();
+//     const book = await Book.findByIdAndRemove(req.params.booksId);
+//     if(!book) return res.status(404).send("Subcategory is not found");
+//     res.status(202).send("Subcategory is deleted successfully");
+//   } catch (error) {
+//     res.send(error.message);
+//   }
+// })
 
 module.exports = router;

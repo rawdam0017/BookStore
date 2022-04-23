@@ -97,94 +97,70 @@ const addBook = async (req, res, next) => {
 }
 
 const UpdateBook = async (req, res, next) => {
-
+    const id = req.params.id;
     const { name, author, description, price, available, image } = req.body
     let book;
 
-
     try {
 
-        book = await Book.findByIdAndUpdate({ name: req.params.name }, {
-            $set:{name, author, description, price, available, image}
+        book = await Book.findByIdAndUpdate(id, {
+            name, author, description, price, available, image
         })
 
-        if (!book) {
+        book = await book.save()
 
-            return res.status(404).json({ message: 'Unable to update by this id' })
-        }
-        // book = await book.save()
-
-        const category = await BookCatalog.findById(req.params.categoryId,
-            {
-                books: { $elemMatch: { name: req.params.name } }
-            });
-        console.log(category)
-        if (!category) return res.status(404).send("Cateory is not found");
-        const updateRes = await BookCatalog.findOneAndUpdate({ "_id": req.params.categoryId },
-            {
-                $set: { books: { name, author, description, price, available, image } }
-            })
-
-        return res.status(200).json({ updateRes })
     } catch (err) {
         console.log(err);
     }
 
+    if (!book) {
 
+        return res.status(404).json({ message: 'Unable to update by this id' })
+    }
+
+    return res.status(200).json({ book })
 
 }
 
 const deleteBook = async (req, res, next) => {
-    // router.delete('/:id/category/:categoryName', async (req, res) => {
+    const id = req.params.id
+
+    let book;
+
     try {
-        // const book = await Book.findOne({ name: req.params.name })
-        // if (!book) return res.status(404).send("Book is not found");
-        const category = await BookCatalog.findById(req.params.categoryId,
-            {
-                books: { $elemMatch: { name: req.params.name } }
-            });
-        console.log(category)
-        if (!category) return res.status(404).send("Cateory is not found");
-        const deldetRes = await BookCatalog.findOneAndUpdate({ "_id": req.params.categoryId },
-            {
-                $pull: { books: { "_id": category.books[0]._id } }
-            })
-        console.log(req.params)
-        // book.remove();
-        // category.books.remove(req.params.id);
-        // category.save();
-        console.log(category.books[0]._id);
-        res.status(202)
-            // .json();
-            .send(deldetRes);
-    } catch (error) {
-        res.send(error.message);
+
+        book = await Book.findByIdAndRemove(id)
+    } catch (err) {
+
+        console.log(err);
     }
-    //  book = Book.findByIdAndRemove(req.params.booksId);
 
+    if (!book) {
 
+        return res.status(404).json({ message: 'Unable to delete by this id' })
+    }
 
+    return res.status(200).json({ message: 'this book successfuly deleted' })
+    // try {
 
-    // if (!book) return res.status(404).send("Subcategory is not found");
-    //   })
-    //     const id = req.params.id
-
-    //     let book;
-
-    //     try {
-
-    //     } catch (err) {
-
-    //         console.log(err);
-    //     }
-
-    //     if (!book) {
-
-    //         return res.status(404).json({ message: 'Unable to delete by this id' })
-    //     }
-
-    //     return res.status(200).json({ message: 'this book successfuly deleted' })
-
+    //     const category = await BookCatalog.findById(req.params.categoryId,
+    //         {
+    //             books: { $elemMatch: { name: req.params.name } }
+    //         });
+    //     console.log(category)
+    //     if (!category) return res.status(404).send("Cateory is not found");
+    //     const deldetRes = await BookCatalog.findOneAndUpdate({ "_id": req.params.categoryId },
+    //         {
+    //             $pull: { books: { "_id": category.books[0]._id } }
+    //         })
+    //     console.log(req.params)
+    //     console.log(category.books[0]._id);
+    //     res.status(202)
+    //         // .json();
+    //         .send(deldetRes);
+    // } catch (error) {
+    //     res.send(error.message);
+    // }
 }
 
 
